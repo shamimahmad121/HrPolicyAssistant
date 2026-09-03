@@ -1,0 +1,50 @@
+<mat-toolbar color="primary" class="toolbar">
+  <mat-icon class="brand-icon">policy</mat-icon>
+  <span class="brand-title">HR Policy Assistant</span>
+
+  <span class="spacer"></span>
+
+  @if (auth.currentUser(); as user) {
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-chip">
+      <mat-icon>account_circle</mat-icon>
+      <span class="user-name">{{ user.displayName }}</span>
+      <mat-chip class="role-chip" [class.admin]="auth.isHrAdmin()">{{ user.roles.join(', ') }}</mat-chip>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <div class="menu-email">{{ user.email }}</div>
+      <button mat-menu-item (click)="signOut()">
+        <mat-icon>logout</mat-icon>
+        <span>Sign out</span>
+      </button>
+    </mat-menu>
+  }
+</mat-toolbar>
+
+<nav mat-tab-nav-bar mat-align-tabs="start" class="tab-nav" [tabPanel]="tabPanel">
+  <a
+    mat-tab-link
+    routerLink="/ask"
+    routerLinkActive
+    #askActive="routerLinkActive"
+    [active]="askActive.isActive"
+  >
+    <mat-icon class="tab-icon">chat</mat-icon>
+    Ask HR
+  </a>
+  @if (auth.isHrAdmin()) {
+    <a
+      mat-tab-link
+      routerLink="/policies"
+      routerLinkActive
+      #policiesActive="routerLinkActive"
+      [active]="policiesActive.isActive"
+    >
+      <mat-icon class="tab-icon">folder_managed</mat-icon>
+      Policy Management
+    </a>
+  }
+</nav>
+
+<mat-tab-nav-panel #tabPanel class="content">
+  <router-outlet></router-outlet>
+</mat-tab-nav-panel>

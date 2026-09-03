@@ -1,0 +1,71 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <div class="brand">
+      <mat-icon class="brand-icon">policy</mat-icon>
+      <div>
+        <h1>HR Policy Assistant</h1>
+        <p>Sign in to continue</p>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="username" autocomplete="username" />
+        @if (form.controls.username.hasError('required') && form.controls.username.touched) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (form.controls.username.hasError('email') && form.controls.username.touched) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword.set(!hidePassword())"
+          [attr.aria-label]="'Toggle password visibility'"
+        >
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <mat-error>Password is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (error()) {
+        <p class="error-banner">{{ error() }}</p>
+      }
+
+      <button mat-flat-button color="primary" class="full-width submit-btn" type="submit" [disabled]="loading()">
+        @if (loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Sign in
+        }
+      </button>
+    </form>
+
+    @if (usingMockAuth) {
+      <div class="demo-panel">
+        <p class="demo-title">
+          <mat-icon inline="true">info</mat-icon>
+          No Cognito User Pool configured yet — using demo accounts.
+        </p>
+        <div class="demo-buttons">
+          <button mat-stroked-button type="button" (click)="fillDemo('admin')">Fill HR-Admin demo login</button>
+          <button mat-stroked-button type="button" (click)="fillDemo('employee')">Fill Employee demo login</button>
+        </div>
+      </div>
+    }
+  </mat-card>
+</div>

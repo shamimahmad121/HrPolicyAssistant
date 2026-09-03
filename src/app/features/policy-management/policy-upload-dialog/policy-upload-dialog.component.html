@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>
+  {{ isReplace ? 'Replace Policy — New Version' : 'Upload New Policy' }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    @if (isReplace) {
+      <p class="hint">
+        Uploading a new version retires the current version — it stays in history, it's never overwritten.
+      </p>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Policy name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Category</mat-label>
+      <input matInput formControlName="category" placeholder="e.g. Leave & Time Off" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Effective date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="effectiveDate" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="file-picker">
+      <input #fileInput type="file" accept="application/pdf,.pdf" hidden (change)="onFileSelected($event)" />
+      <button mat-stroked-button type="button" (click)="fileInput.click()">
+        <mat-icon>upload_file</mat-icon>
+        Choose PDF file
+      </button>
+      @if (selectedFile(); as file) {
+        <span class="file-name">
+          <mat-icon inline="true">picture_as_pdf</mat-icon>
+          {{ file.name }} ({{ (file.size / 1024 / 1024).toFixed(2) }} MB)
+        </span>
+      }
+      @if (fileError()) {
+        <p class="file-error">{{ fileError() }}</p>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">
+      {{ isReplace ? 'Upload new version' : 'Upload policy' }}
+    </button>
+  </mat-dialog-actions>
+</form>

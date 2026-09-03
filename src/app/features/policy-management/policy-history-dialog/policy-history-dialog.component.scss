@@ -1,0 +1,31 @@
+.full-width {
+  width: 100%;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.status-chip {
+  font-size: 11px;
+  min-height: 22px;
+  background: #eee;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: capitalize;
+
+  &.active {
+    background: #e3f5e6;
+    color: #1e7e34;
+  }
+}
+
+mat-icon[inline] {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 4px;
+  color: #b3261e;
+}

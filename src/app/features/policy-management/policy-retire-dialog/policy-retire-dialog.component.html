@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>
+  <mat-icon class="warn-icon" inline="true">warning</mat-icon>
+  Retire policy?
+</h2>
+
+<mat-dialog-content>
+  <p>
+    <strong>{{ policy.name }}</strong> (v{{ policy.currentVersion }}) will be marked retired and removed from the
+    answers employees can be grounded on. Its documents and version history stay in the audit record — nothing is
+    deleted.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="warn" [mat-dialog-close]="true">Retire policy</button>
+</mat-dialog-actions>

@@ -1,0 +1,61 @@
+<div class="chat-wrap">
+  <div class="message-list">
+    @for (message of messages(); track message.id) {
+      <div class="message-row" [class.from-user]="message.role === 'user'">
+        <div class="bubble" [class.user-bubble]="message.role === 'user'">
+          <p class="bubble-text">{{ message.text }}</p>
+
+          @if (message.citations?.length) {
+            <div class="citations">
+              @for (citation of message.citations; track citation.documentName + citation.section) {
+                <mat-chip
+                  class="citation-chip"
+                  matTooltip="Source document — grounded, not model memory"
+                >
+                  <mat-icon inline="true">description</mat-icon>
+                  {{ citation.documentName }} · {{ citation.section }} · v{{ citation.version }}
+                </mat-chip>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (sending()) {
+      <div class="message-row">
+        <div class="bubble typing">
+          <mat-spinner diameter="16"></mat-spinner>
+          <span>Searching policy documents…</span>
+        </div>
+      </div>
+    }
+
+    <div #scrollAnchor></div>
+  </div>
+
+  @if (messages().length <= 1) {
+    <div class="suggestions">
+      @for (suggestion of suggestions; track suggestion) {
+        <button mat-stroked-button type="button" (click)="ask(suggestion)">{{ suggestion }}</button>
+      }
+    </div>
+  }
+
+  <form class="composer" (ngSubmit)="ask()">
+    <mat-form-field appearance="outline" class="composer-field">
+      <mat-label>Ask a question about HR policy…</mat-label>
+      <input
+        matInput
+        [ngModel]="draft()"
+        (ngModelChange)="draft.set($event)"
+        name="draft"
+        (keydown.enter)="onEnter($event)"
+        [disabled]="sending()"
+      />
+    </mat-form-field>
+    <button mat-fab color="primary" type="submit" [disabled]="sending() || !draft().trim()" aria-label="Send">
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
+</div>
